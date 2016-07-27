@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Print the graph with fancy ascii output.
+ *
  * Created by voigtjr on 7/26/16.
  */
 public class AsciiOut implements Visit {
@@ -19,7 +21,7 @@ public class AsciiOut implements Visit {
     private static final String END_1 = "\\_";
     private static final String CYCLE = "...";
 
-    private void render(String node, List<Node> depth, boolean cycle) {
+    private String render(String node, List<Node> depth, boolean cycle) {
         StringBuilder sb = new StringBuilder();
         if (!depth.isEmpty()) {
             for (Node dn : depth.subList(0, depth.size() - 1)) {
@@ -46,7 +48,7 @@ public class AsciiOut implements Visit {
             sb.append("...");
         }
 
-        System.out.println(sb.toString());
+        return sb.toString();
     }
 
     @Override
@@ -58,12 +60,12 @@ public class AsciiOut implements Visit {
                 List<String> path = Lists.transform(depth, d -> d.getNode());
                 if (path.contains(node)) {
                     // Cycle
-                    render(node, depth, true);
+                    System.out.println(render(node, depth, true));
                     return VisitStop.YES;
                 }
             }
         }
-        render(node, depth, false);
+        System.out.println(render(node, depth, false));
         return VisitStop.NO;
     }
 }

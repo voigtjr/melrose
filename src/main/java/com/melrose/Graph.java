@@ -1,13 +1,11 @@
 package com.melrose;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 
 import java.io.*;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,7 +46,6 @@ public class Graph {
 
     public static Graph loadFromFile(String filename) throws FileNotFoundException, IOException {
         BufferedReader r = new BufferedReader(new FileReader(filename));
-        List<String> nin = Lists.newLinkedList();
         List<Edge> ein = Lists.newLinkedList();
 
         String line;
@@ -57,40 +54,38 @@ public class Graph {
             if (m.matches()) {
                 String a = m.group(1);
                 String b = m.group(2);
-                nin.add(a);
-                nin.add(b);
                 ein.add(new Edge(a, b));
             }
         }
 
-        return new Graph(nin, ein);
+        return new Graph(ein);
     }
 
-    private final Set<String> nodes;
-    private final Set<Edge> edges;
+    private final Map<String, List<String>> edges;
+    private final List<String> EMPTY_LIST = Lists.newArrayListWithCapacity(0);
 
-    private Graph(Iterable<String> nodes, Iterable<Edge> edges) {
-        this.nodes = Sets.newHashSet(nodes);
-        this.edges = Sets.newHashSet(edges);
-    }
+    private Graph(Iterable<Edge> edges) {
+        Map<String, ImmutableList.Builder<String>> collected = Maps.newHashMap();
 
-    public Set<String> getNodes() {
-        return ImmutableSet.copyOf(nodes);
-    }
+        for (Edge e : edges) {
+            ImmutableList.Builder<String> b = collected.computeIfAbsent(e.l, key -> ImmutableList.builder());
+            b.add(e.r);
+        }
 
-    public Set<Edge> getEdges() {
-        return ImmutableSet.copyOf(edges);
+        ImmutableMap.Builder<String, List<String>> mb = ImmutableMap.builder();
+        for (Map.Entry<String, ImmutableList.Builder<String>> e : collected.entrySet()) {
+            mb.put(e.getKey(), e.getValue().build());
+        }
+
+        this.edges = mb.build();
     }
 
     public List<String> getDeps(String node) {
-        // TODO use a better representation
-        List<String> deps = Lists.newArrayList();
-        for (Edge e : edges) {
-            if (e.l.equals(node)) {
-                deps.add(e.r);
-            }
+        List<String> ret = edges.get(node);
+        if (ret == null) {
+            return EMPTY_LIST;
         }
-        return deps;
+        return ret;
     }
 
 }

@@ -14,7 +14,7 @@ public class Dfs {
     }
 
     private final Graph g;
-    private final Deque<DfsNode> stack = new ArrayDeque<DfsNode>();
+    private final Deque<DfsNode> stack = new ArrayDeque<>();
 
     private Dfs(Graph g) {
         this.g = g;
@@ -27,6 +27,15 @@ public class Dfs {
         stack.push(DfsNode.make(child, g.getDeps(child)));
     }
 
+    /**
+     * Traverse the graph starting at source.
+     *
+     * If there are cycles, the visit callback must detect them using the state that it is given and stop the search
+     * with VisitStop.YES
+     *
+     * @param source Starting point (node id)
+     * @param visit Callback on each node visited
+     */
     public void traverseForeverFrom(String source, Visit visit) {
         stack.push(DfsNode.make(source, g.getDeps(source)));
 

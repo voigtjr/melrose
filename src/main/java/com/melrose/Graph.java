@@ -65,6 +65,9 @@ public class Graph {
     private final List<String> EMPTY_LIST = Lists.newArrayListWithCapacity(0);
 
     private Graph(Iterable<Edge> edges) {
+        // collect edges to assemble dependency mapping
+        // make everything immutable so it can be returned directly
+
         Map<String, ImmutableList.Builder<String>> collected = Maps.newHashMap();
 
         for (Edge e : edges) {

@@ -6,11 +6,11 @@ import java.util.List;
  * Created by voigtjr on 7/25/16.
  */
 public class DfsNode implements Node {
-    public static DfsNode make(String node, List<String> deps) {
+    static DfsNode make(String node, List<String> deps) {
         return new DfsNode(node, deps);
     }
 
-    public static DfsNode popFirst(DfsNode dn) {
+    static DfsNode popFirst(DfsNode dn) {
         return new DfsNode(dn.node, dn.deps.subList(1, dn.deps.size()));
     }
 

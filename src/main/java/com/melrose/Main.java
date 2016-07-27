@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length != 1) {
-            System.err.println("Usage: melrose input_file");
+            System.err.println("Usage: java -jar melrose.jar input_file");
             return;
         }
 

@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="melrose:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/melrose_jar</output-path>
+    <root id="archive" name="melrose.jar">
+      <element id="module-output" name="melrose" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/guava/guava/19.0/guava-19.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
